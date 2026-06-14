@@ -1,4 +1,4 @@
-const CACHE_NAME='courses-repas-stock-v2';
+const CACHE_NAME='courses-repas-stock-v6';
 const APP_FILES=[
   './',
   './index.html',

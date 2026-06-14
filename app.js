@@ -60,22 +60,26 @@ function unitOptions(current){const units=allUnits(),values=units.includes(curre
 function productDatalist(){return`<datalist id="productSuggestions">${state.favoriteProducts.map(x=>`<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>`}
 function grouped(items){return categoryNames().reduce((groups,cat)=>{const matches=items.filter(x=>(x.category||'Autres')===cat);if(matches.length)groups.push([cat,matches]);return groups},[])}
 function categoryStyle(name){const setting=state.categorySettings.find(x=>x.name===name),color=setting?.color||'#7e7e7e';return`style="background:${color}24;--category-color:${color}"`}
-function updateCounts(){document.getElementById('courseCount').textContent=state.courses.filter(x=>!x.done).length;document.getElementById('stockLowCount').textContent=state.stock.filter(x=>stockStatusKey(x)!=='good').length;updateTodaySummary()}
-function updateTodaySummary(){
-  const dayKeys=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],day=dayKeys[new Date().getDay()];
-  const midi=state.meals[`${day}-Midi`]||'Non prévu',soir=state.meals[`${day}-Soir`]||'Non prévu';
-  const remaining=state.courses.filter(x=>!x.done).length,watch=state.stock.filter(x=>stockStatusKey(x)!=='good');
-  const alert=watch.find(x=>stockStatusKey(x)==='buy')||watch[0];
-  const box=document.getElementById('todaySummary');
-  box.innerHTML=`<button class="today-card today-meals" data-today-hub="repas"><span class="today-icon">🍽️</span><span class="today-copy"><span class="today-label">Repas</span><span class="today-value">Midi : ${escapeHtml(midi)}<span class="today-separator">•</span>Soir : ${escapeHtml(soir)}</span></span><span class="today-arrow">›</span></button><button class="today-card today-courses" data-today-hub="courses"><span class="today-icon">🛒</span><span class="today-copy"><span class="today-label">Courses</span><span class="today-value">${remaining} restante${remaining>1?'s':''}</span></span><span class="today-arrow">›</span></button><button class="today-card today-stock" data-today-hub="stock"><span class="today-icon">📦</span><span class="today-copy"><span class="today-label">Stock</span><span class="today-value">${watch.length} à surveiller</span></span><span class="today-arrow">›</span></button>${alert?`<button class="today-card today-alert" data-today-hub="stock"><span class="today-icon">⚠️</span><span class="today-copy"><span class="today-label">Alerte</span><span class="today-value">${escapeHtml(alert.name)} ${stockStatusKey(alert)==='buy'?'à racheter':'faible'}</span></span><span class="today-arrow">›</span></button>`:'<button class="today-card today-alert" data-today-hub="stock"><span class="today-icon">✓</span><span class="today-copy"><span class="today-label">Alerte</span><span class="today-value">Tout va bien</span></span><span class="today-arrow">›</span></button>'}`;
-  box.querySelectorAll('[data-today-hub]').forEach(button=>button.onclick=()=>setHub(button.dataset.todayHub))
+function updateCounts(){document.getElementById('courseCount').textContent=state.courses.filter(x=>!x.done).length;const watch=state.stock.filter(x=>stockStatusKey(x)!=='good');document.getElementById('stockLowCount').textContent=watch.length;updateStockAlert(watch)}
+function updateStockAlert(watch){
+  const alert=watch.find(x=>stockStatusKey(x)==='buy')||watch[0],line=document.getElementById('stockAlertLine'),hubBadge=document.getElementById('hubStockAlert'),navBadge=document.getElementById('navStockAlert');
+  [hubBadge,navBadge].forEach(badge=>{badge.textContent=watch.length;badge.hidden=!watch.length});
+  if(!alert){line.hidden=true;line.textContent='';return}
+  line.hidden=false;line.innerHTML=`⚠️ ${escapeHtml(alert.name)} ${stockStatusKey(alert)==='buy'?'à racheter':'faible'}${watch.length>1?` · ${watch.length} produits à surveiller`:''}`;line.onclick=()=>setHub('stock')
 }
-function setHub(h){state.active=h;save();document.querySelectorAll('.hub').forEach(b=>b.classList.toggle('active',b.dataset.hub===h));render()}
+function setBottomNav(name){document.querySelectorAll('[data-nav]').forEach(button=>button.classList.toggle('active',button.dataset.nav===name))}
+function setHub(h,navName=h){state.active=h;save();document.querySelectorAll('.hub').forEach(b=>b.classList.toggle('active',b.dataset.hub===h));setBottomNav(navName);render()}
 document.querySelectorAll('.hub').forEach(b=>b.addEventListener('click',()=>setHub(b.dataset.hub)));
+document.querySelectorAll('[data-nav]').forEach(button=>button.addEventListener('click',()=>{
+  const target=button.dataset.nav;
+  if(target==='accueil'){setHub('repas','accueil');document.querySelector('.app').scrollIntoView({behavior:'smooth',block:'start'})}
+  else setHub(target,target)
+}));
 function render(){updateCounts();if(state.active==='repas')renderMeals();else if(state.active==='courses')renderCourses();else renderStock()}
 function renderMeals(){
-  const days=[['Lun','Lundi'],['Mar','Mardi'],['Mer','Mercredi'],['Jeu','Jeudi'],['Ven','Vendredi'],['Sam','Samedi'],['Dim','Dimanche']];
-  const list=days.map(([key,label])=>`<section class="day-card"><div class="day-title">${label}</div><div class="day-meals"><button class="meal-slot midi-slot" data-slot="${key}-Midi"><span class="meal-slot-label">Midi</span><span class="meal-slot-value">${escapeHtml(state.meals[`${key}-Midi`]||'Ajouter')}</span></button><button class="meal-slot soir-slot" data-slot="${key}-Soir"><span class="meal-slot-label">Soir</span><span class="meal-slot-value">${escapeHtml(state.meals[`${key}-Soir`]||'Ajouter')}</span></button></div></section>`).join('');
+  const days=[['Dim','Dimanche'],['Lun','Lundi'],['Mar','Mardi'],['Mer','Mercredi'],['Jeu','Jeudi'],['Ven','Vendredi'],['Sam','Samedi']],todayIndex=new Date().getDay();
+  const orderedDays=Array.from({length:7},(_,offset)=>days[(todayIndex+offset)%7]);
+  const list=orderedDays.map(([key,label],index)=>`<section class="day-card ${index===0?'current-day':''}" data-day="${key}"><div class="day-title"><span>${label}</span>${index===0?'<span class="today-badge">Aujourd’hui</span>':''}</div>${index===0?'<div class="day-message">Belle journée et bon appétit !</div>':''}<div class="day-meals"><button class="meal-slot midi-slot" data-slot="${key}-Midi"><span class="meal-slot-label">Midi</span><span class="meal-slot-value">${escapeHtml(state.meals[`${key}-Midi`]||'Ajouter')}</span></button><button class="meal-slot soir-slot" data-slot="${key}-Soir"><span class="meal-slot-label">Soir</span><span class="meal-slot-value">${escapeHtml(state.meals[`${key}-Soir`]||'Ajouter')}</span></button></div></section>`).join('');
   dynamic.innerHTML=`<div class="panel repas"><div class="section-title">Menu de la semaine</div><div class="meal-legend"><span class="legend"><i class="dot midi"></i>Midi</span><span class="legend"><i class="dot soir"></i>Soir</span></div><div class="week-list">${list}</div><button class="primary repas" id="addMeal">＋ Ajouter un repas</button><button class="clear-week" id="clearWeek">Effacer tout le menu de la semaine</button></div>`;
   dynamic.querySelectorAll('[data-slot]').forEach(c=>c.onclick=()=>openMeal(c.dataset.slot));document.getElementById('addMeal').onclick=()=>openMeal('Lun-Midi');document.getElementById('clearWeek').onclick=clearWeek
 }
@@ -190,7 +194,7 @@ document.getElementById('openSettings').onclick=openSettings;
 document.getElementById('closeSettings').onclick=()=>settingsDialog.close();
 document.getElementById('importDataFile').onchange=event=>{const file=event.target.files[0];if(file)importDataFile(file);event.target.value=''};
 window.__appTest={getState:()=>structuredClone(state),classify,stockStatusKey,setHub,reset:()=>{state=structuredClone(defaultState);save();render()}};
-document.querySelectorAll('.hub').forEach(b=>b.classList.toggle('active',b.dataset.hub===state.active));render();
+document.querySelectorAll('.hub').forEach(b=>b.classList.toggle('active',b.dataset.hub===state.active));setBottomNav(state.active);render();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 }

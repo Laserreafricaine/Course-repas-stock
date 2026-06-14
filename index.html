@@ -26,16 +26,16 @@
       <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
       <main class="app">
         <div class="app-head"><div class="title">Accueil</div><button class="settings-btn" id="openSettings" aria-label="Ouvrir les paramètres">⚙</button></div>
-        <div class="today"><strong>Aujourd’hui</strong><div class="today-summary" id="todaySummary"></div></div>
         <div class="hub-grid">
           <button class="hub repas active" data-hub="repas"><div class="avatar">🍽️</div><div class="name">Repas</div><div class="desc">Midi : Yassa<br>Soir : Gratin</div></button>
           <button class="hub courses" data-hub="courses"><div class="avatar">🛒</div><div class="name">Courses</div><div class="desc"><span id="courseCount">0</span> à acheter</div></button>
-          <button class="hub stock" data-hub="stock"><div class="avatar">📦</div><div class="name">Stock</div><div class="desc"><span id="stockLowCount">0</span> produits à surveiller</div></button>
+          <button class="hub stock" data-hub="stock"><span class="alert-count hub-alert-count" id="hubStockAlert" hidden>0</span><div class="avatar">📦</div><div class="name">Stock</div><div class="desc"><span id="stockLowCount">0</span> produits à surveiller</div></button>
         </div>
+        <button class="stock-alert-line" id="stockAlertLine" type="button" hidden></button>
         <section class="dynamic" id="dynamic"></section>
         <div class="no-scroll-note">Conception mobile sans défilement horizontal.</div>
       </main>
-      <nav class="bottom"><div class="nav active">⌂<span>Accueil</span></div><div class="nav">🛒<span>Courses</span></div><div class="nav">🍽️<span>Repas</span></div><div class="nav">📦<span>Stock</span></div></nav>
+      <nav class="bottom" aria-label="Navigation principale"><button class="nav active" data-nav="accueil" type="button">⌂<span>Accueil</span></button><button class="nav" data-nav="courses" type="button">🛒<span>Courses</span></button><button class="nav" data-nav="repas" type="button">🍽️<span>Repas</span></button><button class="nav nav-stock" data-nav="stock" type="button"><span class="alert-count nav-alert-count" id="navStockAlert" hidden>0</span>📦<span>Stock</span></button></nav>
     </div>
   </div>
 </div>
