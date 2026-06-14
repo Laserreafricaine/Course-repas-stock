@@ -74,9 +74,9 @@ function setHub(h){state.active=h;save();document.querySelectorAll('.hub').forEa
 document.querySelectorAll('.hub').forEach(b=>b.addEventListener('click',()=>setHub(b.dataset.hub)));
 function render(){updateCounts();if(state.active==='repas')renderMeals();else if(state.active==='courses')renderCourses();else renderStock()}
 function renderMeals(){
-  const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];let cells='<div class="week-cell head"></div>'+days.map(d=>`<div class="week-cell head">${d}</div>`).join('');
-  for(const period of ['Midi','Soir']){cells+=`<div class="week-cell row ${period.toLowerCase()}">${period}</div>`;cells+=days.map(d=>`<div class="week-cell ${period.toLowerCase()}-slot" data-slot="${d}-${period}">${escapeHtml(state.meals[`${d}-${period}`]||'+')}</div>`).join('')}
-  dynamic.innerHTML=`<div class="panel repas"><div class="section-title">Menu de la semaine</div><div class="meal-legend"><span class="legend"><i class="dot midi"></i>Midi</span><span class="legend"><i class="dot soir"></i>Soir</span></div><div class="week-wrap"><div class="week-grid">${cells}</div></div><button class="primary repas" id="addMeal">＋ Ajouter un repas</button><button class="clear-week" id="clearWeek">Effacer tout le menu de la semaine</button></div>`;
+  const days=[['Lun','Lundi'],['Mar','Mardi'],['Mer','Mercredi'],['Jeu','Jeudi'],['Ven','Vendredi'],['Sam','Samedi'],['Dim','Dimanche']];
+  const list=days.map(([key,label])=>`<section class="day-card"><div class="day-title">${label}</div><div class="day-meals"><button class="meal-slot midi-slot" data-slot="${key}-Midi"><span class="meal-slot-label">Midi</span><span class="meal-slot-value">${escapeHtml(state.meals[`${key}-Midi`]||'Ajouter')}</span></button><button class="meal-slot soir-slot" data-slot="${key}-Soir"><span class="meal-slot-label">Soir</span><span class="meal-slot-value">${escapeHtml(state.meals[`${key}-Soir`]||'Ajouter')}</span></button></div></section>`).join('');
+  dynamic.innerHTML=`<div class="panel repas"><div class="section-title">Menu de la semaine</div><div class="meal-legend"><span class="legend"><i class="dot midi"></i>Midi</span><span class="legend"><i class="dot soir"></i>Soir</span></div><div class="week-list">${list}</div><button class="primary repas" id="addMeal">＋ Ajouter un repas</button><button class="clear-week" id="clearWeek">Effacer tout le menu de la semaine</button></div>`;
   dynamic.querySelectorAll('[data-slot]').forEach(c=>c.onclick=()=>openMeal(c.dataset.slot));document.getElementById('addMeal').onclick=()=>openMeal('Lun-Midi');document.getElementById('clearWeek').onclick=clearWeek
 }
 function clearWeek(){if(confirm('Effacer tous les repas de la semaine ?')){state.meals={};save();render()}}
@@ -191,3 +191,6 @@ document.getElementById('closeSettings').onclick=()=>settingsDialog.close();
 document.getElementById('importDataFile').onchange=event=>{const file=event.target.files[0];if(file)importDataFile(file);event.target.value=''};
 window.__appTest={getState:()=>structuredClone(state),classify,stockStatusKey,setHub,reset:()=>{state=structuredClone(defaultState);save();render()}};
 document.querySelectorAll('.hub').forEach(b=>b.classList.toggle('active',b.dataset.hub===state.active));render();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}

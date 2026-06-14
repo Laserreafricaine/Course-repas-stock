@@ -45,11 +45,14 @@ button{touch-action:manipulation}
 .panel{border-radius:18px;padding:12px;border:1px solid var(--line);background:#fff}
 .panel.repas{background:#fffaf8;border-color:#f1c5ba}.panel.courses{background:#fbfef9;border-color:#cfe2c6}.panel.stock{background:#fbfdff;border-color:#c9ddef}
 .section-title{font-size:19px;font-weight:800;margin:0 0 8px}
-.meal-legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.legend{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}.dot{width:11px;height:11px;border-radius:50%}.dot.midi{background:var(--midi)}.dot.soir{background:var(--soir)}
-.week-wrap{width:100%;overflow:hidden;border:1px solid #eaded9;border-radius:13px;background:#fff}
-.week-grid{display:grid;grid-template-columns:46px repeat(7,minmax(0,1fr));width:100%}
-.week-cell{border-right:1px solid #eee6e1;border-bottom:1px solid #eee6e1;min-height:48px;padding:4px 2px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;line-height:1.08;overflow-wrap:anywhere;cursor:pointer}
-.week-cell:nth-child(8n){border-right:0}.week-cell.head{background:#fcf7f4;font-weight:800;min-height:34px}.week-cell.row.midi{background:#fff7df;font-weight:800;color:#9b6d13}.week-cell.row.soir{background:#f3effb;font-weight:800;color:#66539a}.week-cell.midi-slot:hover{background:#fff0bf}.week-cell.soir-slot:hover{background:#e8def7}
+.meal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}.legend{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}.dot{width:12px;height:12px;border-radius:50%}.dot.midi{background:var(--midi)}.dot.soir{background:var(--soir)}
+.week-list{display:grid;gap:9px;width:100%}
+.day-card{border:1px solid #eaded9;border-radius:14px;background:#fff;overflow:hidden}
+.day-title{font-family:"Baloo 2";font-size:17px;font-weight:800;padding:7px 11px;background:#fcf7f4;border-bottom:1px solid #eee6e1}
+.day-meals{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
+.meal-slot{border:0;border-radius:11px;min-height:62px;padding:9px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:3px;cursor:pointer;overflow:hidden}
+.meal-slot-label{font-family:"Baloo 2";font-size:13px;font-weight:800}.meal-slot-value{font-size:16px;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.meal-slot.midi-slot{background:#fff4d2;color:#7e5810}.meal-slot.soir-slot{background:#eee8f8;color:#554181}.meal-slot.midi-slot:active{background:#ffe8a2}.meal-slot.soir-slot:active{background:#ded2f1}
 .primary{width:100%;border:0;border-radius:13px;color:#fff;font-weight:800;padding:13px 14px;margin-top:10px;cursor:pointer}.primary.repas{background:var(--repas)}
 .clear-week,.clear-list{width:100%;border:1px solid #efc2b9;border-radius:13px;color:#a94736;background:#fff1ed;font-family:"Baloo 2";font-weight:800;min-height:44px;padding:10px 14px;margin-top:8px;cursor:pointer}
 .add-zone{border-radius:16px;padding:13px;margin-bottom:10px;color:#fff;box-shadow:0 7px 18px rgba(0,0,0,.09)}
@@ -86,6 +89,9 @@ dialog::backdrop{background:rgba(35,30,26,.42)}.modal{padding:16px;background:#f
 .no-scroll-note{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
 @media(max-width:390px){
   .page{padding:8px 0 20px}.page-title,.page-subtitle{display:none}.phone{width:100%;padding:0;border-radius:0;box-shadow:none}.screen{border-radius:0;min-height:100vh}.notch{display:none}
-  .hub{padding:7px;min-height:116px}.hub .name{font-size:13px}.hub .desc{font-size:9.5px}.week-cell{font-size:9px;min-height:46px}.app{padding-left:9px;padding-right:9px}
+  .hub{padding:7px;min-height:116px}.hub .name{font-size:13px}.hub .desc{font-size:9.5px}.app{padding-left:9px;padding-right:9px}
   .add-row{grid-template-columns:minmax(0,1fr) 76px}.add-row button{padding:0 7px}.item{gap:6px;padding:9px 8px}.action-btn{padding:6px 7px;font-size:11px}.modal-grid{grid-template-columns:1fr}
+}
+@media(display-mode:standalone){
+  .page{padding:0}.page-title,.page-subtitle{display:none}.phone{width:100%;max-width:none;padding:0;border-radius:0;box-shadow:none}.screen{border-radius:0;min-height:100dvh}.notch,.statusbar{display:none}.app{padding-top:calc(10px + env(safe-area-inset-top))}
 }
