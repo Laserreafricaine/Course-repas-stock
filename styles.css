@@ -75,7 +75,7 @@ button{touch-action:manipulation}
 .action-btn.edit{background:#edf0ec;color:#3f5240}.action-btn.delete{background:#ffe6e6;color:#a94343}
 .fruit{background:var(--fruit)}.fruit .rayon-head{color:var(--fruit-head)}.fresh{background:var(--fresh)}.fresh .rayon-head{color:var(--fresh-head)}.grocery{background:var(--grocery)}.grocery .rayon-head{color:var(--grocery-head)}.bakery{background:var(--bakery)}.bakery .rayon-head{color:var(--bakery-head)}.frozen{background:var(--frozen)}.frozen .rayon-head{color:var(--frozen-head)}.drinks{background:var(--drinks)}.drinks .rayon-head{color:var(--drinks-head)}.hygiene{background:var(--hygiene)}.hygiene .rayon-head{color:var(--hygiene-head)}.home{background:var(--home)}.home .rayon-head{color:var(--home-head)}.baby{background:var(--baby)}.baby .rayon-head{color:var(--baby-head)}.pets{background:var(--pets)}.pets .rayon-head{color:var(--pets-head)}.other{background:var(--other)}.other .rayon-head{color:var(--other-head)}
 .empty{padding:18px 10px;text-align:center;color:var(--muted);font-size:13px}
-.bottom{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:9px 5px calc(12px + env(safe-area-inset-bottom))}
+.bottom{position:fixed;left:50%;bottom:0;z-index:50;transform:translateX(-50%);width:min(412px,calc(100% - 18px));background:#fff;border:1px solid var(--line);border-bottom:0;border-radius:16px 16px 0 0;box-shadow:0 -6px 20px rgba(63,47,34,.10);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(8px + env(safe-area-inset-bottom))}
 .nav{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:44px;border:0;background:transparent;font-size:10px;color:#7a7773;cursor:pointer;padding:3px}.nav.active{font-weight:800;color:#252525}.nav:active{background:#f3f0ed;border-radius:10px}
 dialog{border:0;border-radius:20px;padding:0;width:min(380px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);box-shadow:0 24px 70px rgba(0,0,0,.22);overflow:auto}
 dialog::backdrop{background:rgba(35,30,26,.42)}.modal{padding:16px;background:#fff;max-width:100%;overflow-x:hidden}.modal h2{margin:0 0 10px}
@@ -88,7 +88,8 @@ dialog::backdrop{background:rgba(35,30,26,.42)}.modal{padding:16px;background:#f
   .page{padding:8px 0 20px}.page-title,.page-subtitle{display:none}.phone{width:100%;padding:0;border-radius:0;box-shadow:none}.screen{border-radius:0;min-height:100vh}.notch{display:none}
   .hub{padding:7px;min-height:116px}.hub .name{font-size:13px}.hub .desc{font-size:9.5px}.app{padding-left:9px;padding-right:9px}
   .add-row{grid-template-columns:minmax(0,1fr) 76px}.add-row button{padding:0 7px}.item{gap:6px;padding:9px 8px}.action-btn{padding:6px 7px;font-size:11px}.modal-grid{grid-template-columns:1fr}
+  .bottom{width:100%;border-left:0;border-right:0;border-radius:0}
 }
 @media(display-mode:standalone){
-  .page{padding:0}.page-title,.page-subtitle{display:none}.phone{width:100%;max-width:none;padding:0;border-radius:0;box-shadow:none}.screen{border-radius:0;min-height:100dvh}.notch,.statusbar{display:none}.app{padding-top:calc(10px + env(safe-area-inset-top))}
+  .page{padding:0}.page-title,.page-subtitle{display:none}.phone{width:100%;max-width:none;padding:0;border-radius:0;box-shadow:none}.screen{border-radius:0;min-height:100dvh}.notch,.statusbar{display:none}.app{padding-top:calc(10px + env(safe-area-inset-top))}.bottom{width:100%;border-left:0;border-right:0;border-radius:0}
 }
