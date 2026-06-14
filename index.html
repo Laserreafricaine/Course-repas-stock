@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f7f4ef">
+<title>Courses, Repas et Stock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+  <div class="page-title">Accueil dynamique</div>
+  <p class="page-subtitle">Repas, courses et stock restent accessibles au même endroit.</p>
+  <div class="phone">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+      <main class="app">
+        <div class="app-head"><div class="title">Accueil</div><button class="settings-btn" id="openSettings" aria-label="Ouvrir les paramètres">⚙</button></div>
+        <div class="today"><strong>Aujourd’hui</strong><div class="today-summary" id="todaySummary"></div></div>
+        <div class="hub-grid">
+          <button class="hub repas active" data-hub="repas"><div class="avatar">🍽️</div><div class="name">Repas</div><div class="desc">Midi : Yassa<br>Soir : Gratin</div></button>
+          <button class="hub courses" data-hub="courses"><div class="avatar">🛒</div><div class="name">Courses</div><div class="desc"><span id="courseCount">0</span> à acheter</div></button>
+          <button class="hub stock" data-hub="stock"><div class="avatar">📦</div><div class="name">Stock</div><div class="desc"><span id="stockLowCount">0</span> produits à surveiller</div></button>
+        </div>
+        <section class="dynamic" id="dynamic"></section>
+        <div class="no-scroll-note">Conception mobile sans défilement horizontal.</div>
+      </main>
+      <nav class="bottom"><div class="nav active">⌂<span>Accueil</span></div><div class="nav">🛒<span>Courses</span></div><div class="nav">🍽️<span>Repas</span></div><div class="nav">📦<span>Stock</span></div></nav>
+    </div>
+  </div>
+</div>
+<dialog id="editor"><form method="dialog" class="modal" id="editorForm"></form></dialog>
+<dialog id="settingsDialog"><div class="settings-modal"><div class="settings-head"><h2>Paramètres</h2><button class="settings-close" id="closeSettings" aria-label="Fermer">×</button></div><div id="settingsContent"></div></div></dialog>
+<input id="importDataFile" type="file" accept="application/json,.json" hidden>
+<script src="app.js"></script>
+</body>
+</html>
